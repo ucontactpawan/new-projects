@@ -1,0 +1,255 @@
+/* Attendance Logs specific styles */
+.logs-container {
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 1800px;
+  margin: 20px auto;
+  min-height: calc(100vh - 100px);
+}
+
+/* Filter header styles */
+.filter-header {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.filter-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.form-select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.form-select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+  outline: none;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+/* Button styles */
+.btn {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn i {
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background-color: #6366f1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #4f46e5;
+}
+
+.btn-secondary {
+  background-color: #9ca3af;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #6b7280;
+}
+
+.btn-success {
+  background-color: #10b981;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+}
+
+/* Table styles */
+.table-responsive {
+  margin-top: 20px;
+  border-radius: 12px;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Status badges */
+.badge {
+  padding: 6px 12px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+}
+
+.bg-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.bg-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.bg-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Total hours display */
+.total-hours {
+  background-color: white;
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  font-size: 1.1em;
+}
+
+#totalWorkingHours {
+  background-color: #6366f1;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 24px;
+  margin-left: 12px;
+  font-weight: 600;
+  min-width: 120px;
+  text-align: center;
+}
+
+.total-time {
+    font-family: monospace;
+    text-align: right;
+    padding-right: 20px !important;
+}
+
+/* New styles */
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.attendance-table {
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.filters-section {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.select-wrapper {
+    min-width: 200px;
+    flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 98%;
+        padding: 10px;
+    }
+    
+    .filters-section {
+        gap: 10px;
+    }
+    
+    .select-wrapper {
+        min-width: 100%;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .logs-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .filter-header {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .filter-controls {
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .total-hours {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  #totalWorkingHours {
+    margin-top: 8px;
+    margin-left: 0;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+}
