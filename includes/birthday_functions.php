@@ -1,28 +1,35 @@
 <?php 
 
-function getUpcomingBirthdays($daysAhead = 5){
+function getUpcomingBirthdays($daysAhead = 7) {
     global $conn;
-
+    
     $query = "SELECT 
-            e.name as employee_name,
-            ed.dob,
-            DATE_FORMAT(ed.dob, '%d-%m') as birth_date,
-            DATEDIFF(
-            DATE(CONCAT(YEAR(CURDATE()), DATE_FORMAT (ed.dob, '-%m-%d'))),
-            CURDATE())
-            as  days_until_birthday
-            FROM employee_details ed
-            JOIN employees e ON e.id = ed.employee_id
-            HAVING days_until_birthday BETWEEN 0 AND ? 
-            ORDER BY days_until_birthday";
-
-            $stmt = $conn->prepare($query);
-            if(!$stmt){
-                die("Query preparation failed: " . $conn->error);
-            }
-            $stmt->bind_param('i', $daysAhead);
-            $stmt->execute();
-            return $stmt->get_result();
+        e.name as employee_name,
+        ed.dob,
+        DATE(ed.dob) as birth_date,
+        DATEDIFF(
+            DATE_ADD(
+                CASE 
+                    WHEN DAYOFYEAR(CURDATE()) <= DAYOFYEAR(ed.dob) 
+                    THEN CURDATE()
+                    ELSE DATE_ADD(CURDATE(), INTERVAL 1 YEAR)
+                END,
+                INTERVAL (DAYOFYEAR(ed.dob) - DAYOFYEAR(CURDATE())) DAY
+            ),
+            CURDATE()
+        ) as days_until_birthday
+    FROM employee_details ed
+    JOIN employees e ON e.id = ed.employee_id
+    HAVING days_until_birthday BETWEEN 0 AND ?
+    ORDER BY days_until_birthday";
+    
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        die("Query preparation failed: " . $conn->error);
+    }
+    $stmt->bind_param('i', $daysAhead);
+    $stmt->execute();
+    return $stmt->get_result();
 }
 
 function formatBirthday($dob, $days_until){
