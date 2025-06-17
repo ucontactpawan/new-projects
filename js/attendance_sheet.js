@@ -54,6 +54,12 @@ $(document).ready(function () {
     e.preventDefault();
     saveAttendance();
   });
+
+  // Save attendance form submission
+  $('#attendanceForm').on('submit', function(e) {
+    e.preventDefault();
+    saveAttendanceData();
+  });
 });
 
 function updateRowStatus(row) {
@@ -323,6 +329,12 @@ $(document).ready(function () {
     e.preventDefault();
     saveAttendance();
   });
+
+  // Save attendance form submission
+  $('#attendanceForm').on('submit', function(e) {
+    e.preventDefault();
+    saveAttendanceData();
+  });
 });
 
 // Save attendance function
@@ -407,6 +419,62 @@ function saveAttendance() {
 
             alert('Error saving attendance: ' + error);
         },
+    });
+}
+
+// Save attendance data function
+function saveAttendanceData() {
+    // Get the submit button
+    var $submitButton = $('.btn-save-attendance');
+    var originalText = $submitButton.text();
+
+    // Disable button and show saving state
+    $submitButton.text('Saving...').prop('disabled', true);
+
+    // Get form data
+    var formData = new FormData(document.getElementById('attendanceForm'));
+    var jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    // Make the AJAX call
+    $.ajax({
+        url: 'includes/save_attendance.php',
+        type: 'POST',
+        data: JSON.stringify(jsonData),
+        contentType: 'application/json',
+        dataType: 'json',
+        beforeSend: function() {
+            // Double-check button state
+            $submitButton.text('Saving...').prop('disabled', true);
+        },
+        success: function(response) {
+            // Reset button immediately
+            $submitButton.text(originalText).prop('disabled', false);
+
+            if (response.status === 'success') {
+                toastr.success('Attendance saved successfully');
+                // Small delay before reload
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(response.message || 'Failed to save attendance');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Reset button and show error
+            $submitButton.text(originalText).prop('disabled', false);
+            toastr.error('An error occurred while saving attendance');
+            console.error('Save error:', error);
+        },
+        complete: function() {
+            // Final check to ensure button is reset
+            if ($submitButton.text() === 'Saving...') {
+                $submitButton.text(originalText).prop('disabled', false);
+            }
+        }
     });
 }
 

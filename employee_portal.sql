@@ -1,6 +1,4 @@
 -- Create and use the database
-DROP DATABASE IF EXISTS attendance_portal;
-CREATE DATABASE attendance_portal;
 USE attendance_portal;
 
 
@@ -15,10 +13,28 @@ CREATE TABLE employees (
     address VARCHAR(255),
     position ENUM('admin', 'employee', 'manager') DEFAULT 'employee',
     status ENUM('0', '1') DEFAULT '1',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    joining_date DATE NOT NULL DEFAULT CURDATE(),
+    employee_type ENUM('admin', 'employee', 'hr', 'projectManager', 'finance') NULL DEFAULT 'employee'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Create attendance table (without date column)
+-- Create employee_details table
+CREATE TABLE employee_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    father_name VARCHAR(100),
+    mother_name VARCHAR(100),
+    dob DATE,
+    contact VARCHAR(20),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
+    INDEX idx_employee_id (employee_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Create attendance table(without date column)
 CREATE TABLE attendance (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     employee_id INT(11) NOT NULL,

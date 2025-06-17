@@ -11,7 +11,8 @@ try {
     while (ob_get_level()) ob_end_clean();
     header('Content-Type: application/json');
 
-    $date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');    // Only get employees who don't have attendance marked for the date  
+    $date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');   
+    // Only get employees who don't have attendance marked for the date  
     $query = "SELECT e.id, e.name 
               FROM employees e
               LEFT JOIN attendance a ON e.id = a.employee_id 

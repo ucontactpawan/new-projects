@@ -158,7 +158,8 @@ try {    // Start transaction
         }
         mysqli_stmt_bind_param($delete_stmt, "i", $attendance_id);
         mysqli_stmt_execute($delete_stmt);
-        mysqli_stmt_close($delete_stmt);        // Insert IN record into attendance_history with creator_id
+        mysqli_stmt_close($delete_stmt);     
+        // Insert IN record into attendance_history with creator_id
         $history_in_sql = "INSERT INTO attendance_history 
                           (attendance_id, employee_id, action, date_time, comments, status, creator_id) 
                           VALUES (?, ?, 'IN', ?, ?, '1', ?)";

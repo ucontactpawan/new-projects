@@ -18,7 +18,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){    $id = intval($_POST['id']);
     if($stmt->num_rows > 0){
         echo json_encode(['status' => 'error', 'message' => 'Email already exists']);
     } else {
-        $stmt->close();        // Update employee details
+        $stmt->close();      
+        // Update employee details
         $update_query = "UPDATE employees SET name = ?, email = ?, position = ?, contact = ?, address = ? WHERE id = ?";
         $update_stmt = $conn->prepare($update_query);
         $update_stmt->bind_param("sssssi", $name, $email, $position, $contact, $address, $id);

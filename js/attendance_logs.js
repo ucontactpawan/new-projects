@@ -48,14 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#clearFilters").click(function () {
     window.location.href = "attendance_logs.php";
   });
-
   // Calculate total working hours
   let totalMinutes = 0;
   $("tbody tr").each(function () {
-    const totalTime = $(this).find("td:eq(5)").text();
+    const totalTime = $(this).find("td:eq(5)").text().trim();
     if (totalTime !== "-") {
-      const [hours, minutes] = totalTime.split("h ");
-      totalMinutes += parseInt(hours) * 60 + parseInt(minutes);
+      const [hours, minutesPart] = totalTime.split("Hr ");
+      const minutes = parseInt(minutesPart.replace("Min", ""));
+      if (!isNaN(hours) && !isNaN(minutes)) {
+        totalMinutes += parseInt(hours) * 60 + minutes;
+      }
     }
   });
 

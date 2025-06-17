@@ -3,7 +3,8 @@
 include 'db.php';
 
 if(isset($_POST['id'])){
-    $id = intval($_POST['id']);    // Delete related attendance_logs first
+    $id = intval($_POST['id']);   
+     // Delete related attendance_logs first
     $conn->query("DELETE FROM attendance_logs WHERE employee_id = $id");
 
     $stmt = $conn->prepare("DELETE FROM employees WHERE id = ?");

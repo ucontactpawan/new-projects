@@ -28,7 +28,8 @@ try {
     $email = mysqli_real_escape_string($conn, $_POST["email"]);
     $position = mysqli_real_escape_string($conn, $_POST["position"]);
     $contact = mysqli_real_escape_string($conn, $_POST["contact"]);
-    $address = mysqli_real_escape_string($conn, $_POST["address"]);// Check if email already exists
+    $address = mysqli_real_escape_string($conn, $_POST["address"]); 
+    // Check if email already exists
     $check_email = "SELECT id FROM employees WHERE email = ?";
     $check_stmt = mysqli_prepare($conn, $check_email);
     mysqli_stmt_bind_param($check_stmt, "s", $email);

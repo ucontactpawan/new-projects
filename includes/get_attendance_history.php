@@ -2,11 +2,14 @@
 
 include '../includes/db.php';
 
+
+
 if($_SERVER['REQUEST_METHOD']=== 'GET'){
     $employeeId = $_GET['employee_id'] ?? null;
     $date = $_GET['date'] ?? null;
 
-    try{          $query = "SELECT 
+    try{       
+           $query = "SELECT 
             a.id,
             a.employee_id,
             e.name as employee_name,
@@ -33,10 +36,10 @@ if($_SERVER['REQUEST_METHOD']=== 'GET'){
         $params = [];
         $types = "";
         if($employeeId){          
-              $query .= " AND a.employee_id = ?";
+            $query .= " AND a.employee_id = ?";
             $params[] = $employeeId;
             $types .= "i";
-        }        if($date){
+        }if($date){
             $date = date('Y-m-d', strtotime($date)); // Convert any date format to YYYY-MM-DD
             $query .= " AND DATE(a.in_time) = ?";
             $params[] = $date;
