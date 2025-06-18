@@ -9,6 +9,44 @@
   min-height: calc(100vh - 100px);
 }
 
+/* Custom status badge colors */
+.badge.bg-half-day {
+    background-color: #ff6b2b !important;
+    color: white;
+}
+.badge.bg-full-day {
+    background-color: #2bc2c2 !important;
+    color: white;
+}
+.badge.bg-extra-working {
+    background-color: #218cfe !important;
+    color: white;
+}
+.badge.bg-early-out {
+    background-color: #e3c622 !important;
+    color: white;
+}
+.badge.bg-on-time {
+    background-color: #64b9ed !important;
+    color: white;
+}
+.badge.bg-late-in {
+    background-color: #a86b02 !important;
+    color: white;
+}
+.badge.bg-holiday {
+    background-color: #dc578e !important;
+    color: white;
+}
+.badge.bg-leave {
+    background-color: #de663e !important;
+    color: white;
+}
+.badge.bg-ignore {
+    background-color: #443737 !important;
+    color: white;
+}
+
 /* Filter header styles */
 .filter-header {
   background: white;
@@ -111,30 +149,67 @@ table {
   border-collapse: collapse;
 }
 
-/* Status badges */
-.badge {
-  padding: 6px 12px;
+/* Table styles */
+.table {
+  margin-bottom: 0;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered > :not(caption) > * > * {
+  border-color: #dee2e6;
+  border-width: 1px;
+}
+
+.table > thead {
+  background-color: #ffffff;
+}
+
+.table > thead > tr > th {
   font-weight: 500;
-  font-size: 0.875rem;
-  border-radius: 6px;
-  display: inline-block;
-  min-width: 80px;
-  text-align: center;
+  border-bottom-width: 1px;
+  padding: 12px 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  vertical-align: middle;
 }
 
-.bg-success {
-  background-color: #10b981;
-  color: white;
+.table > tbody > tr > td {
+  padding: 12px 8px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 400;
+  vertical-align: middle;
 }
 
-.bg-warning {
-  background-color: #ffc107;
-  color: #000;
+.table .badge {
+  font-weight: 500;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
 }
 
-.bg-danger {
-  background-color: #dc3545;
-  color: white;
+/* Weekend row styling */
+.table > tbody > tr:nth-child(7n),
+.table > tbody > tr:nth-child(7n-1) {
+  background-color: #ffffff;
+}
+
+/* Status badge colors */
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Remove hover effect */
+.table tbody tr:hover {
+  background-color: transparent;
 }
 
 /* Total hours display */
@@ -252,4 +327,18 @@ table {
     padding: 8px 12px;
     font-size: 0.8125rem;
   }
+}
+
+/* Weekend and empty row styles */
+.table tbody tr.table-secondary {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.table tbody tr.table-secondary td {
+    border-color: #dee2e6;
+}
+
+.table tbody tr.table-secondary:hover {
+    background-color: #e9ecef;
 }

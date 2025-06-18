@@ -11,11 +11,12 @@ try {
     while (ob_get_level()) ob_end_clean();
     header('Content-Type: application/json');
 
-    $date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');    // Get employees who don't have attendance for today
+    $date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');   
+    // Only get employees who don't have attendance marked for the date  
     $query = "SELECT e.id, e.name 
               FROM employees e
               LEFT JOIN attendance a ON e.id = a.employee_id 
-              AND DATE(a.created_at) = DATE(?)
+              AND DATE(a.in_time) = DATE(?)
               WHERE e.status = '1' AND a.id IS NULL
               ORDER BY e.name";
 
@@ -35,28 +36,27 @@ try {
         throw new Exception("Failed to get result: " . $stmt->error);
     }
 
-    $data = [];
+    $employees = [];
     while ($row = $result->fetch_assoc()) {
-        $data[] = [
+        $employees[] = [
             'id' => $row['id'],
             'name' => $row['name']
         ];
     }
 
     echo json_encode([
-        'status' => 'success',
-        'data' => $data
+        'success' => true,
+        'employees' => $employees
     ]);
 
 } catch (Exception $e) {
     error_log("Error in get_available_employees.php: " . $e->getMessage());
     http_response_code(500);
     echo json_encode([
-        'status' => 'error',
+        'success' => false,
         'message' => $e->getMessage()
     ]);
 } finally {
-    // Close database connections
     if (isset($stmt)) {
         $stmt->close();
     }

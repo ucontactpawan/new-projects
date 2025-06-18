@@ -9,6 +9,7 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Employee Anniversaries</title>
@@ -22,64 +23,70 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/anniversary.css">
 </head>
+
 <body>
     <?php include('includes/navbar.php'); ?>
-    <?php include 'includes/sidebar.php'; ?>
-    <div class="main-content">
-        <div class="anniversary-container" style="padding: 40px 0 60px 0; max-width: 800px; margin: 0 auto;">
-            <h1>EMPLOYEE CELEBRATIONS</h1>
-            <div class="anniversary-section">
-                <h2>Today's Anniversaries</h2>
+    <?php include 'includes/sidebar.php'; ?> 
+    <div class="anniversary-container">
+        <h1>EMPLOYEE ANNIVERSARIES</h1>
+
+        <div class="anniversary-sections">
+            <!-- Today's Anniversaries -->
+            <div class="todays-anniversaries">
+                <h2 class="anniversary-heading">Today's Anniversaries</h2>
                 <div class="anniversary-cards">
                     <?php if (count($todaysAnniversaries)): ?>
                         <?php foreach ($todaysAnniversaries as $emp): ?>
-                            <div class="anniversary-card today">
+                            <div class="anniversary-card future" data-days="0">
                                 <div class="cake-icon">🎉</div>
-                                <div style="font-size:1.3em;font-weight:600;"><?php echo htmlspecialchars($emp['name']); ?></div>
-                                <div><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></div>
-                                <div class="when today">Today</div>
+                                <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
+                                <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
+                                <p class="days-until">Today</p>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <div style="color:#aaa;">No anniversaries today.</div>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <div class="anniversary-section">
-                <h2>Upcoming Anniversaries</h2>
-                <div class="anniversary-cards">
-                    <?php if (count($upcomingAnniversaries)): ?>
-                        <?php foreach ($upcomingAnniversaries as $emp): ?>
-                            <div class="anniversary-card">
-                                <div class="cake-icon">🎉</div>
-                                <div style="font-size:1.1em;font-weight:600;"><?php echo htmlspecialchars($emp['name']); ?></div>
-                                <div><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></div>
-                                <div class="when"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div style="color:#aaa;">No upcoming anniversaries this month.</div>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <div class="anniversary-section">
-                <h2>Recent Anniversaries</h2>
-                <div class="anniversary-cards">
-                    <?php if (count($recentAnniversaries)): ?>
-                        <?php foreach ($recentAnniversaries as $emp): ?>
-                            <div class="anniversary-card recent">
-                                <div class="cake-icon">🎉</div>
-                                <div style="font-size:1.1em;font-weight:600;"><?php echo htmlspecialchars($emp['name']); ?></div>
-                                <div><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></div>
-                                <div class="when"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div style="color:#aaa;">No recent anniversaries this month.</div>
+                        <p class="no-anniversaries">No anniversaries today.</p>
                     <?php endif; ?>
                 </div>
             </div>
 
+            <!-- Upcoming Anniversaries -->
+            <div class="upcoming-anniversaries">
+                <h2 class="anniversary-heading">Upcoming Anniversaries</h2>
+                <div class="anniversary-cards">
+                    <?php if (count($upcomingAnniversaries)): ?>
+                        <?php foreach ($upcomingAnniversaries as $emp): ?>
+                            <div class="anniversary-card future">
+                                <div class="cake-icon">🎉</div>
+                                <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
+                                <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
+                                <p class="days-until"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="no-anniversaries">No upcoming anniversaries this month.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Recent Anniversaries -->
+            <div class="recent-anniversaries">
+                <h2 class="anniversary-heading">Recent Anniversaries</h2>
+                <div class="anniversary-cards">
+                    <?php if (count($recentAnniversaries)): ?>
+                        <?php foreach ($recentAnniversaries as $emp): ?>
+                            <div class="anniversary-card past">
+                                <div class="cake-icon">🎉</div>
+                                <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
+                                <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
+                                <p class="days-until"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="no-anniversaries">No recent anniversaries this month.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -87,4 +94,5 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
     <?php include 'includes/footer.php' ?>
     <script src="js/anniversary.js"></script>
 </body>
+
 </html>

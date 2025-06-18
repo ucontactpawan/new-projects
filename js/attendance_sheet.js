@@ -50,9 +50,15 @@ $(document).ready(function () {
   });
 
   // Save button click handler
-  $(document).on('click', '#saveBtnContainer', function(e) {
+  $('.btn-save-attendance').on('click', function(e) {
     e.preventDefault();
     saveAttendance();
+  });
+
+  // Save attendance form submission
+  $('#attendanceForm').on('submit', function(e) {
+    e.preventDefault();
+    saveAttendanceData();
   });
 });
 
@@ -117,11 +123,9 @@ function hideLoader() {
 }
 
 function loadAttendanceData() {
-    // Use the hidden ISO date input for backend processing
-    const date = document.getElementById('attendanceDateISO').value;
+    const date = document.getElementById('attendanceDate').value;
     const selectedType = document.querySelector('input[name="attendanceType"]:checked');
     const type = selectedType ? selectedType.value : 'single';
-    
     localStorage.setItem('attendanceType', type);
     const tbody = document.getElementById('attendanceTableBody');
     
@@ -134,170 +138,71 @@ function loadAttendanceData() {
             saveBtn.innerHTML = '<i class="fas fa-save"></i> ' + (type === 'single' ? 'Save' : 'Save All');
             saveBtn.onclick = saveAttendance;
         }
-    }    showLoader();
+    }
+    
+    showLoader();
+    
+    fetch(`includes/get_available_employees.php?date=${date}`)
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                tbody.innerHTML = '';
+                
+                if (!response.employees || response.employees.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">No employees available for attendance</td></tr>';
+                    hideLoader();
+                    return;
+                }
 
-    // Load available employees for single mode
-    if (type === 'single') {
-        fetch(`includes/get_available_employees.php?date=${date}`)
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 'success') {
-                    availableEmployees = response.data;
-                    const tbody = document.getElementById('attendanceTableBody');
-                    tbody.innerHTML = '';
-
-                    if (availableEmployees.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No employees available for attendance</td></tr>';
-                        hideLoader();
-                        return;
-                    }
-
+                if (type === 'single') {
+                    // For single type
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>1</td>
                         <td>
                             <select class="form-select form-select-sm single-employee-select">
                                 <option value="">Select Employee</option>
-                                ${availableEmployees.map(emp => `
+                                ${response.employees.map(emp => `
                                     <option value="${emp.id}">${emp.name}</option>
                                 `).join('')}
                             </select>
                         </td>
-                        <td>
-                            <input type="time" class="form-control form-control-sm" name="in_time">
-                        </td>
-                        <td>
-                            <input type="time" class="form-control form-control-sm" name="out_time">
-                        </td>
-                        <td>
-                            <textarea class="form-control form-control-sm" rows="2" name="comments" 
-                                placeholder="Add comments..."></textarea>
-                        </td>
+                        <td><input type="time" class="form-control form-control-sm" name="in_time"></td>
+                        <td><input type="time" class="form-control form-control-sm" name="out_time"></td>
+                        <td><textarea class="form-control form-control-sm" rows="2" name="comments" placeholder="Add comments..."></textarea></td>
                     `;
-                    
                     tbody.appendChild(tr);
                     
-                    // Set up event listener for employee selection
                     const employeeSelect = tr.querySelector('.single-employee-select');
                     employeeSelect.addEventListener('change', function() {
                         if (this.value) {
                             tr.setAttribute('data-employee-id', this.value);
                         }
                     });
-
-                    hideLoader();
+                } else {
+                    // For all type
+                    response.employees.forEach((emp, index) => {
+                        const tr = document.createElement('tr');
+                        tr.setAttribute('data-employee-id', emp.id);
+                        tr.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${emp.name}</td>
+                            <td><input type="time" class="form-control form-control-sm" name="in_time"></td>
+                            <td><input type="time" class="form-control form-control-sm" name="out_time"></td>
+                            <td><textarea class="form-control form-control-sm" rows="2" name="comments" placeholder="Add comments..."></textarea></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error loading employees: ' + error.message);
+                
                 hideLoader();
-            });
-        return;
-    }    // For all mode, load unsaved attendance data
-    fetch(`includes/get_attendance_data.php?date=${date}&type=${type}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            } else {
+                throw new Error(response.message || 'Failed to load employees');
             }
-            return response.json();
-        })
-        .then(response => {
-            const tbody = document.getElementById('attendanceTableBody');
-            tbody.innerHTML = '';
-            
-            if (response.status === 'error') {
-                throw new Error(response.message || 'Unknown error occurred');
-            }
-
-            const data = response.data || [];
-            
-            if (type === 'single') {
-                // Create a new row for single employee selection
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>1</td>
-                    <td>
-                        <select class="form-select form-select-sm single-employee-select">
-                            <option value="">Select Employee</option>
-                            ${availableEmployees.map(emp => `
-                                <option value="${emp.id}">${emp.name}</option>
-                            `).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="time" class="form-control form-control-sm" name="in_time">
-                    </td>
-                    <td>
-                        <input type="time" class="form-control form-control-sm" name="out_time">
-                    </td>
-                    <td>
-                        <textarea class="form-control form-control-sm" rows="2" name="comments" 
-                            placeholder="Add comments..."></textarea>
-                    </td>
-                `;
-                
-                tbody.appendChild(tr);
-
-                // Set up event listener for employee selection
-                const employeeSelect = tr.querySelector('.single-employee-select');
-                employeeSelect.addEventListener('change', function() {
-                    const selectedId = this.value;
-                    if (selectedId) {
-                        tr.setAttribute('data-employee-id', selectedId);
-                        
-                        // Find existing data for this employee if any
-                        const employeeData = data.find(d => d.employee_id === selectedId);
-                        if (employeeData) {
-                            tr.querySelector('[name="in_time"]').value = employeeData.in_time || '';
-                            tr.querySelector('[name="out_time"]').value = employeeData.out_time || '';
-                            tr.querySelector('[name="comments"]').value = employeeData.comments || '';
-                        } else {
-                            // Clear the fields if no data exists
-                            tr.querySelector('[name="in_time"]').value = '';
-                            tr.querySelector('[name="out_time"]').value = '';
-                            tr.querySelector('[name="comments"]').value = '';
-                        }
-                    }
-                });
-
-                return;
-            }
-            
-            // Handle all mode
-            if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No employees found</td></tr>';
-                return;
-            }
-              // For all mode, show all employees without attendance
-            data.forEach((row, index) => {
-                const tr = document.createElement('tr');
-                tr.setAttribute('data-employee-id', row.employee_id);
-                
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${row.employee_name || 'N/A'}</td>
-                    <td>
-                        <input type="time" class="form-control form-control-sm" name="in_time">
-                    </td>
-                    <td>
-                        <input type="time" class="form-control form-control-sm" name="out_time">
-                    </td>
-                    <td>
-                        <textarea class="form-control form-control-sm" 
-                            rows="2" 
-                            name="comments"
-                            placeholder="Add comments..."></textarea>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error loading attendance data: ' + error.message);
-        })
-        .finally(() => {
+            alert('Error loading employees: ' + error.message);
             hideLoader();
         });
 }
@@ -420,80 +325,183 @@ $(document).ready(function () {
   });
 
   // Save button click handler
-  $(document).on('click', '#saveBtnContainer', function(e) {
+  $('.btn-save-attendance').on('click', function(e) {
     e.preventDefault();
     saveAttendance();
+  });
+
+  // Save attendance form submission
+  $('#attendanceForm').on('submit', function(e) {
+    e.preventDefault();
+    saveAttendanceData();
   });
 });
 
 // Save attendance function
 function saveAttendance() {
+    const date = document.getElementById('attendanceDate').value;
     const tbody = document.getElementById('attendanceTableBody');
     const rows = tbody.getElementsByTagName('tr');
-    const date = document.getElementById('attendanceDate').value;
-
     const attendance = [];
+    let hasData = false;
 
+    // Store save button reference and original text
+    const saveBtn = document.querySelector('.btn-save-attendance');
+    const originalText = saveBtn.innerHTML;
+
+    // Collect attendance data from all rows
     for (const row of rows) {
         const employeeId = row.getAttribute('data-employee-id');
-        if (!employeeId) continue;
+        if (!employeeId) continue; // Skip rows without employee ID
 
-        const inTime = row.querySelector('input[type="time"][name="in_time"]')?.value || null;
-        const outTime = row.querySelector('input[type="time"][name="out_time"]')?.value || null;
+        const inTime = row.querySelector('input[name="in_time"]')?.value;
+        const outTime = row.querySelector('input[name="out_time"]')?.value;
         const comments = row.querySelector('textarea[name="comments"]')?.value || '';
 
-        if (inTime || outTime) {
+        // Only validate and include rows where any data has been entered
+        if (inTime || outTime || comments.trim()) {
+            hasData = true;
+            // For rows with any data, in_time is required
+            if (!inTime) {
+                const employeeName = row.cells[1].textContent.trim();
+                alert(`Please enter in time for employee: ${employeeName}`);
+                return;
+            }
+
+            // Combine date with times to create full datetime strings
+            const inDateTime = `${date} ${inTime}:00`;
+            const outDateTime = outTime ? `${date} ${outTime}:00` : null;
+
             attendance.push({
                 employee_id: parseInt(employeeId),
-                in_time: inTime,
-                out_time: outTime,
-                comments: comments
+                in_time: inDateTime,
+                out_time: outDateTime,
+                comments: comments.trim()
             });
         }
     }
 
-    if (attendance.length === 0) {
-        alert('Please enter attendance data before saving.');
+    if (!hasData) {
+        alert('Please enter attendance data for at least one employee');
         return;
     }
 
     // Show loading state
-    const saveBtn = document.querySelector('.btn-save-attendance');
-    const originalText = saveBtn.innerHTML;
     saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     saveBtn.disabled = true;
 
     // Send data to server
-    fetch('includes/save_attendance.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+    $.ajax({
+        url: 'includes/save_attendance.php',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
             date: date,
             attendance: attendance
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success' || data.success === true) {
-            // Show success message
-            $('#successModal').modal('show');
-            // Reload attendance data
-            loadAttendanceData();
-        } else {
-            throw new Error(data.message || 'Failed to save attendance');
-        }
-    })
-    .catch(error => {
-        console.error('Save error:', error);
-        alert('Error saving attendance: ' + error.message);
-    })
-    .finally(() => {
-        // Reset button state
-        saveBtn.innerHTML = originalText;
-        saveBtn.disabled = false;
+        }),
+        success: function(response) {
+            // Reset button state first
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+
+            if (response && (response.status === 'success' || response.success === true)) {
+                alert('Attendance saved successfully!');
+                // Reload data to show updated state
+                loadAttendanceData();
+            } else {
+                alert(response.message || 'Failed to save attendance');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Reset button state first
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+
+            alert('Error saving attendance: ' + error);
+        },
     });
+}
+
+// Save attendance data function
+function saveAttendanceData() {
+    // Get the submit button
+    var $submitButton = $('.btn-save-attendance');
+    var originalText = $submitButton.text();
+
+    // Disable button and show saving state
+    $submitButton.text('Saving...').prop('disabled', true);
+
+    // Get form data
+    var formData = new FormData(document.getElementById('attendanceForm'));
+    var jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    // Make the AJAX call
+    $.ajax({
+        url: 'includes/save_attendance.php',
+        type: 'POST',
+        data: JSON.stringify(jsonData),
+        contentType: 'application/json',
+        dataType: 'json',
+        beforeSend: function() {
+            // Double-check button state
+            $submitButton.text('Saving...').prop('disabled', true);
+        },
+        success: function(response) {
+            // Reset button immediately
+            $submitButton.text(originalText).prop('disabled', false);
+
+            if (response.status === 'success') {
+                toastr.success('Attendance saved successfully');
+                // Small delay before reload
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(response.message || 'Failed to save attendance');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Reset button and show error
+            $submitButton.text(originalText).prop('disabled', false);
+            toastr.error('An error occurred while saving attendance');
+            console.error('Save error:', error);
+        },
+        complete: function() {
+            // Final check to ensure button is reset
+            if ($submitButton.text() === 'Saving...') {
+                $submitButton.text(originalText).prop('disabled', false);
+            }
+        }
+    });
+}
+
+// Helper functions to show success/error messages in the UI
+function showSuccess(message) {
+    const container = document.querySelector('.message-container') || createMessageContainer();
+    container.innerHTML = `<div class="alert alert-success">${message}</div>`;
+    container.style.display = 'block';
+    setTimeout(() => {
+        container.style.display = 'none';
+    }, 5000);
+}
+
+function showError(message) {
+    const container = document.querySelector('.message-container') || createMessageContainer();
+    container.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+    container.style.display = 'block';
+    setTimeout(() => {
+        container.style.display = 'none';
+    }, 5000);
+}
+
+function createMessageContainer() {
+    const container = document.createElement('div');
+    container.className = 'message-container';
+    document.querySelector('.att-control-box').insertAdjacentElement('afterend', container);
+    return container;
 }
 
 // Format date as "12 June 2025"
