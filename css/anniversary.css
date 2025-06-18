@@ -1,0 +1,75 @@
+.anniversary-container h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    background: linear-gradient(90deg, #4e73df 40%, #1cc88a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    word-break: break-word;
+}
+.anniversary-section {
+    margin-bottom: 32px;
+}
+.anniversary-section h2 {
+    color: #1a237e;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e3f2fd;
+    text-align: left;
+}
+.anniversary-cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.anniversary-card {
+    max-width: 210px;
+    min-width: 180px;
+    padding: 18px 12px 14px 12px;
+    margin: 0 18px 18px 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(30,40,90,0.07);
+    background: #f8fafc;
+    border: 2px solid #e3f2fd;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    transition: box-shadow 0.2s;
+}
+.anniversary-card.today {
+    background: linear-gradient(135deg, #fffbe6 80%, #fffde7 100%);
+    border: 2px solid #ffe082;
+}
+.anniversary-card .cake-icon {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+.anniversary-card .when {
+    color: #4e73df;
+    font-weight: 500;
+    margin-top: 6px;
+}
+.anniversary-card .when.today {
+    color: #ff9800;
+}
+.anniversary-card.recent {
+    opacity: 0.7;
+}
+@media (max-width: 700px) {
+    .anniversary-cards {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .anniversary-card {
+        margin-right: 0;
+        margin-bottom: 18px;
+        width: 100%;
+        min-width: unset;
+        max-width: unset;
+    }
+}

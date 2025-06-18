@@ -7,5 +7,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li><a href="employee.php" class="<?php echo ($current_page == 'employee.php' ? 'active' : ''); ?>">Employees</a></li>
         <li><a href="attendance_sheet.php" class="<?php echo ($current_page == 'attendance_sheet.php' ? 'active' : ''); ?>">Attendance Sheet</a></li>
         <li><a href="attendance_logs.php" class="<?php echo ($current_page == 'attendance_logs.php' ? 'active' : ''); ?>">Attendance Logs</a></li>
+        <!-- Adding Birthday page link -->
+         <li><a href="birthday.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'birthday.php' ? 'active' : ''); ?>">Birthday</a></li>
     </ul>
 </div>

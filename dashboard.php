@@ -77,7 +77,8 @@ include('includes/db.php');
                 <h3 id="onTimePercent">57.1%</h3>
             </div>
         </div>
-    </div> <?php include('includes/footer.php'); ?>
+    </div> 
+    <?php include('includes/footer.php'); ?>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -72,9 +72,7 @@ include 'includes/auth.php';
                         </div>
                     </div>
                 </div>
-            </div>          
-              <!-- Table Container -->         
-               <div class="table-container">
+            </div>            <!-- Table Container -->            <div class="table-container">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
