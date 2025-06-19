@@ -8,7 +8,7 @@ body {
 }
 
 .birthday-container {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px 20px 60px 20px;
     margin-top: 80px;
@@ -16,65 +16,88 @@ body {
 }
 
 .birthday-container h1 {
-    font-size: 2.2em;
-    font-weight: 700;
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #4e73df;
     text-align: center;
-    letter-spacing: 1px;
-    margin-bottom: 40px;
-    background: linear-gradient(90deg, #4e73df 0%, #36b9cc 100%);
+    white-space: nowrap;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    background: linear-gradient(90deg, #4e73df 40%, #1cc88a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    word-break: break-word;
 }
 
 .birthday-sections {
     display: grid;
-    gap: 40px;
+    gap: 30px;
+    margin-top: 30px;
 }
 
-.section-container {
-    margin-bottom: 30px;
-}
 
-.section-container h2 {
-    color: #36455c;
-    font-size: 1.5em;
+.section-container h2, .birthday-heading {
+    color: #1a237e;
+    font-size: 1.3em;
     font-weight: 600;
-    margin-bottom: 25px;
-    position: relative;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e3f2fd;
+    text-align: left;
+    letter-spacing: 0.5px;
 }
 
 .birthday-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
+    margin-top: 16px;
 }
 
 .birthday-card {
     background: #fff;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 10px;
+    padding: 14px 18px;
     text-align: center;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    border: 1px solid #e8f0fe;
-    min-width: 200px;
-    flex: 0 1 calc(33.333% - 20px);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    border: 1.5px solid #e0e0e0;
+    min-width: 180px;
+    max-width: 210px;
+    margin-bottom: 12px;
+    margin-right: 0;
+    transition: box-shadow 0.2s, transform 0.2s;
+    font-size: 0.98em;
 }
 
 .birthday-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+    transform: translateY(-3px);
+}
+
+.birthday-card.past {
+    background: #f8f9fa;
+    border: 1.5px solid #e9ecef;
+    margin-bottom: 50px;
+}
+
+.birthday-card.future {
+    background: #f3f8ff;
+    border: 1.5px solid #e3f2fd;
 }
 
 .birthday-card.highlight-today {
-    background: #fffbeb;
-    border: 1px solid #fef3c7;
+    background: linear-gradient(135deg, #fff9c4 0%, #fff8e1 100%);
+    border: 2px solid #ffd54f;
+}
+
+.birthday-card.highlight-today .cake-icon {
+    animation: bounce 2s infinite;
 }
 
 .cake-icon {
-    font-size: 1.8em;
-    margin-bottom: 12px;
+    font-size: 1.5em;
+    margin-bottom: 8px;
 }
 
 .birthday-card .employee-name {
@@ -104,19 +127,6 @@ body {
     padding: 20px;
     font-style: italic;
     font-size: 0.95em;
-}
-    margin-left: 250px;
-}
-
-h1::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(to right, #1a237e, #2196f3);
 }
 
 .birthday-heading {
@@ -172,18 +182,23 @@ h3 {
     0% {
         box-shadow: 0 0 0 0 rgba(255, 213, 79, 0.4);
     }
+
     70% {
         box-shadow: 0 0 0 8px rgba(255, 213, 79, 0);
     }
+
     100% {
         box-shadow: 0 0 0 0 rgba(255, 213, 79, 0);
     }
 }
 
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-8px);
     }
@@ -205,11 +220,11 @@ h3 {
     .birthday-container {
         margin-left: 0;
     }
-    
+
     .birthday-card {
         flex: 1 1 100%;
     }
-    
+
     .section-container h2 {
         font-size: 1.3em;
     }
@@ -224,6 +239,7 @@ h3 {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

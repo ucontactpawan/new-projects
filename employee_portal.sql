@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS attendance_history;
 DROP TABLE IF EXISTS attendance;
 DROP TABLE IF EXISTS employee_details;
 DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS notifications;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Create employees table
@@ -70,6 +71,22 @@ CREATE TABLE attendance_history (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES employees(id),
     FOREIGN KEY (attendance_id) REFERENCES attendance(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Create notifications table for birthday and other notifications
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    title VARCHAR(255) NOT NULL,
+    message TEXT,
+    birthday_date DATE,
+    status TINYINT DEFAULT 1 ,
+    last_sent DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES employees(id) ON DELETE SET NULL,
+    INDEX idx_status (status),
+    INDEX idx_birthday_date (birthday_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

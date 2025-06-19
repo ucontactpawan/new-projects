@@ -13,7 +13,7 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
 <head>
     <meta charset="UTF-8">
     <title>Employee Anniversaries</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/anniversary.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -21,12 +21,12 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
     <link rel="stylesheet" href="css/style.css">
     <!-- Component styles -->
     <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/anniversary.css">
+    
 </head>
 
 <body>
     <?php include('includes/navbar.php'); ?>
-    <?php include 'includes/sidebar.php'; ?> 
+    <?php include ('includes/sidebar.php'); ?> 
     <div class="anniversary-container">
         <h1>EMPLOYEE ANNIVERSARIES</h1>
 
@@ -41,7 +41,6 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
                                 <div class="cake-icon">🎉</div>
                                 <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
                                 <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
-                                <p class="days-until">Today</p>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -60,7 +59,6 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
                                 <div class="cake-icon">🎉</div>
                                 <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
                                 <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
-                                <p class="days-until"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></p>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -79,7 +77,6 @@ list($todaysAnniversaries, $upcomingAnniversaries, $recentAnniversaries) = categ
                                 <div class="cake-icon">🎉</div>
                                 <h3><?php echo htmlspecialchars($emp['name']); ?></h3>
                                 <p class="join-date"><?php echo date('d M Y', strtotime($emp['joining_date'])); ?></p>
-                                <p class="days-until"><?php echo isset($emp['when']) ? $emp['when'] : ''; ?></p>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>

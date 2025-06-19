@@ -16,13 +16,14 @@ body {
 }
 
 .anniversary-container h1 {
-    font-size: 2.2em;
-    font-weight: 700;
+    font-size: 1.4em;
+    font-weight: 500;
     color: #4e73df;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
     letter-spacing: 2px;
     margin-bottom: 28px;
+    margin-left: 0;
     background: linear-gradient(90deg, #4e73df 40%, #1cc88a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -44,6 +45,7 @@ body {
     padding-bottom: 8px;
     border-bottom: 2px solid #e3f2fd;
     text-align: left;
+    
 }
 
 .anniversary-cards {
